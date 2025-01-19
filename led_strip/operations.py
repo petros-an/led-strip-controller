@@ -12,5 +12,4 @@ def fill(led_strip: LedStrip, color: tuple[int, int, int], brightness: float) ->
 
 def clear(led_strip: LedStrip) -> None:
     logger.info("Clearing led strip")
-    led_strip.strip.fill((0, 0, 0))
-    led_strip.brightness = 0
+    fill(led_strip, (0, 0, 0), 0)

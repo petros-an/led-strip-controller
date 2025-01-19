@@ -1,10 +1,11 @@
 from contextlib import contextmanager
 from dataclasses import dataclass
-from time import sleep
 
 import board
 import neopixel
 import logging
+
+from led_strip import operations
 
 logger = logging.getLogger(__name__)
 
@@ -15,13 +16,13 @@ class LedStrip:
 
 
 def perform_startup_animation(led_strip: LedStrip) -> None:
+    logger.info("Performing startup animation")
     brightness = 0.01
     for _ in range(5):
-        led_strip.strip.brightness = brightness
-        led_strip.strip.fill((0, 0, 255))
-        sleep(0.1)
-        led_strip.strip.fill((0, 255, 0))
-        sleep(0.1)
+        operations.fill(led_strip, (0, 0, 0), brightness)
+
+    operations.clear(led_strip)
+
 
 @contextmanager
 def set_up_led_strip(led_number: int, pin: str) -> LedStrip:

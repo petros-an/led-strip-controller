@@ -3,9 +3,9 @@ import click
 
 from server import set_up_server_with_led_strip, run_server
 
-logging.basicConfig(level=logging.DEBUG)
+def setup_logging(log_level: str) -> None:
+    logging.basicConfig(level=log_level.upper())
 
-logger = logging.getLogger(__name__)
 
 
 @click.command()
@@ -13,7 +13,9 @@ logger = logging.getLogger(__name__)
 @click.option("--port", default=6543)
 @click.option("--led_number", default=300)
 @click.option("--pin", default="D18")
-def main(host: str, port: int, led_number: int, pin: str) -> None:
+@click.option("--log_level", default="info")
+def main(host: str, port: int, led_number: int, pin: str, log_level: str) -> None:
+    setup_logging(log_level)
     with set_up_server_with_led_strip(host, port, led_number, pin) as server:
         run_server(server)
 

@@ -1,5 +1,5 @@
 import logging
-from led_strip import LedStrip
+from led_strip.led_strip import LedStrip
 
 logger = logging.getLogger(__name__)
 

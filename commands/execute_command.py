@@ -1,7 +1,7 @@
 from commands.command import Command, TestCommand, StopCommand, FillCommand
 from commands.command_result import CommandResult
 from commands.exceptions import InvalidCommand
-from led_strip import LedStrip
+from led_strip.led_strip import LedStrip
 from commands import fill as fill_command
 from commands import test as test_command
 from commands import stop as stop_command

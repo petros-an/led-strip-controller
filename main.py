@@ -3,9 +3,9 @@ import click
 
 from server import set_up_server_with_led_strip, run_server
 
+
 def setup_logging(log_level: str) -> None:
     logging.basicConfig(level=log_level.upper())
-
 
 
 @click.command()

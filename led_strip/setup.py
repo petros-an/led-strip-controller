@@ -1,7 +1,8 @@
 from contextlib import contextmanager
+from typing import Iterator
 
-import board
-import neopixel
+from wrappers import neopixel, board
+
 import logging
 
 from led_strip.led_strip import LedStrip
@@ -11,7 +12,7 @@ logger = logging.getLogger(__name__)
 
 
 @contextmanager
-def set_up_led_strip(led_number: int, pin: str) -> LedStrip:
+def set_up_led_strip(led_number: int, pin: str) -> Iterator[LedStrip]:
     board_pin = getattr(board, pin)
     with neopixel.NeoPixel(board_pin, led_number) as neopixel_strip:
         led_strip = LedStrip(neopixel_strip)

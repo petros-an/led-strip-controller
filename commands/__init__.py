@@ -5,11 +5,12 @@ __all__ = [
     "CommandExecutionError",
     "CommandResult",
     "Command",
+    "continue_execution",
 ]
 
 from commands.command import Command
 from commands.command_result import CommandResult
 from commands.exceptions import CommandExecutionError, InvalidCommand
-from commands.command import parse_command
 
-from commands.execute_command import execute_command
+from commands.execute_command import execute_command, continue_execution
+from commands.parse import parse_command

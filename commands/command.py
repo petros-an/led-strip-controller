@@ -1,20 +1,21 @@
 from enum import Enum
-from typing import Literal, Union, Any
+from typing import Literal
 import logging
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 
 logger = logging.getLogger(__name__)
 
 
 class Command(BaseModel):
-    pass
+    command_type: "CommandType"
 
 
 class CommandType(str, Enum):
     TEST = "test"
     STOP = "stop"
     FILL = "fill"
+    ROTATE = "rotate"
 
 
 class TestCommand(Command):
@@ -29,16 +30,3 @@ class FillCommand(Command):
 
 class StopCommand(Command):
     command_type: Literal[CommandType.STOP]
-
-
-class CommandSchema(BaseModel):
-    command: Union[TestCommand, FillCommand, StopCommand] = Field(
-        discriminator="command_type"
-    )
-
-
-def parse_command(json_data: dict[str, Any]) -> Command:
-    logger.debug(f"JSON data >> {json_data}")
-    command = CommandSchema.model_validate(json_data)
-    logger.debug(f"Command type: {command.command.command_type}")
-    return command.command

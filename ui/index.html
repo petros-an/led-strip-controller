@@ -76,7 +76,7 @@
         <div>
             <h2>Pulse</h2>
             <div>
-                Speed: <input type="range" min="0" max="100" id="pulse_speed" style="width: 300px" oninput="sendPulse()">
+                Speed: <input type="range" min="1" max="99" id="pulse_speed" style="width: 300px" oninput="sendPulse()">
             </div>
             <br>
             <button type="submit"  onclick="sendPulse()" style="font-size: 150%">Submit</button>
@@ -104,6 +104,9 @@
             socket.onerror = function(event) {
                 initSocket()
             }
+            socket.onmessage = function(event) {
+                console.log(event)
+            };
 
         }
 
@@ -162,9 +165,10 @@
             const data = {
                 "command": {
                     "command_type": "pulse",
-                    "speed": speed,
+                    "speed": Math.round(Number(speed) / 100),
                 }
             }
+            console.log(data)
             send(data)
         }
 

@@ -1,5 +1,4 @@
 import logging
-from time import sleep
 from typing import Literal
 
 from pydantic import Field
@@ -13,12 +12,12 @@ from led_strip import operations
 logger = logging.getLogger(__name__)
 
 step = 0
-period = 10
 
 
 class PulseCommand(Command):
     command_type: Literal[CommandType.PULSE]
-    speed: int = Field(None, ge=1, le=10)
+    color: tuple[int, int, int]
+    window: int = Field(ge=1, le=30)
 
 
 def resume(
@@ -28,23 +27,21 @@ def resume(
     global step
 
     length = len(led_strip.strip)
+    window = command.window
+    color = command.color
+
     index = step % length
-    operations.fill(led_strip, (0, 0, 0))
-    for i in range(
-        index - length // 10,
-        index + length,
-    ):
-        if 0 <= i < length:
-            operations.set_pixel_color(led_strip, i, (0, 0, 255 // 10 * i))
+
+    if step == 0:
+        operations.fill_no_autowrite(led_strip, (0, 0, 0))
 
     for i in range(
-        index - length,
-        index + length + 10,
+        max(0, index - window),
+        min(length, index + window),
     ):
-        if 0 <= i < length:
-            operations.set_pixel_color(led_strip, i, (0, 0, 255 - 255 // 10 * i))
+        operations.set_pixel_color_no_autowrite(led_strip, i, color)
 
-    sleep(0.1)
+    operations.write(led_strip)
 
     step += 1
 

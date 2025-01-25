@@ -21,6 +21,12 @@ if TESTING:
         def __setitem__(self, key, value):
             pass
 
+        def write(self):
+            pass
+
+        def show(self):
+            pass
+
     neopixel = Mock(NeoPixel=_NeoPixel)
     board = Mock()
 else:

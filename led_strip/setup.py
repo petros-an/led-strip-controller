@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 @contextmanager
 def set_up_led_strip(led_number: int, pin: str) -> Iterator[LedStrip]:
     board_pin = getattr(board, pin)
-    with neopixel.NeoPixel(board_pin, led_number) as neopixel_strip:
+    with neopixel.NeoPixel(board_pin, led_number, auto_write=False) as neopixel_strip:
         led_strip = LedStrip(neopixel_strip)
         perform_startup_animation(led_strip)
         set_brightness(led_strip, 1)

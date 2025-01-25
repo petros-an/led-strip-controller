@@ -67,7 +67,9 @@ async def resume_execution_periodically(led_strip: LedStrip, period: float) -> N
             continue_execution(led_strip)
 
 
-async def run_server(server: Server) -> None:
+async def run_server(server: Server, command_resume_period: float) -> None:
     handler = make_message_handler(server.led_strip)
-    asyncio.create_task(resume_execution_periodically(server.led_strip, 0.1))
+    asyncio.create_task(
+        resume_execution_periodically(server.led_strip, command_resume_period)
+    )
     await websocket_server.serve_forever(server.host, server.port, handler)

@@ -22,13 +22,13 @@
             <h2>Fill</h2>
             <div style="font-size: 150%">
                 <div style="height: 5vh">
-                    Red: <input type="range" min="0" max="255" id="red" style="width: 300px" oninput="sendFill()">
+                    Red: <input type="range" min="0" max="255" id="fill_red" style="width: 300px" oninput="sendFill()">
                 </div>
                 <div style="height: 5vh">
-                    Green: <input type="range" min="0" max="255" id="green" style="width: 300px" oninput="sendFill()">
+                    Green: <input type="range" min="0" max="255" id="fill_green" style="width: 300px" oninput="sendFill()">
                 </div>
                 <div style="height: 5vh">
-                    Blue: <input type="range" min="0" max="255" id="blue" style="width: 300px" oninput="sendFill()">
+                    Blue: <input type="range" min="0" max="255" id="fill_blue" style="width: 300px" oninput="sendFill()">
                 </div>
             </div>
 
@@ -76,7 +76,18 @@
         <div>
             <h2>Pulse</h2>
             <div>
-                Speed: <input type="range" min="1" max="99" id="pulse_speed" style="width: 300px" oninput="sendPulse()">
+                <div style="font-size: 150%">
+                    Window: <input type="range" min="1" max="30" id="pulse_window" style="width: 300px">
+                    <div style="height: 5vh">
+                        Red: <input type="range" min="0" max="255" value="100" id="pulse_red" style="width: 300px">
+                    </div>
+                    <div style="height: 5vh">
+                        Green: <input type="range" min="0" max="255" value="100" id="pulse_green" style="width: 300px">
+                    </div>
+                    <div style="height: 5vh">
+                        Blue: <input type="range" min="0" max="255" value="100" id="pulse_blue" style="width: 300px">
+                    </div>
+                </div>
             </div>
             <br>
             <button type="submit"  onclick="sendPulse()" style="font-size: 150%">Submit</button>
@@ -88,6 +99,9 @@
     <script>
 
         let socket = null;
+        let socketReady = false;
+
+        initSocket()
 
         function getSocket() {
             if (socket == null) {
@@ -95,24 +109,30 @@
             }
             return socket
         }
+
+
         function initSocket() {
+            console.log("initSocket")
             socket = new WebSocket('ws://192.168.1.110:6543');
+
             socket.onclose = function(event) {
-                initSocket()
+                socket = null
             }
 
-            socket.onerror = function(event) {
-                initSocket()
+            socket.onopen = function(event) {
             }
-            socket.onmessage = function(event) {
-                console.log(event)
-            };
+            socket.onerror = function(event) {
+                socket.close()
+                socket = null
+            }
+
 
         }
 
 
         function send(data){
             const sock = getSocket()
+
             console.time("_send")
             sock.send(JSON.stringify(data))
             console.timeEnd("_send")
@@ -128,9 +148,9 @@
         }
 
         function sendFill() {
-            const red = document.getElementById('red').value
-            const green = document.getElementById('green').value
-            const blue = document.getElementById('blue').value
+            const red = document.getElementById('fill_red').value
+            const green = document.getElementById('fill_green').value
+            const blue = document.getElementById('fill_blue').value
             const data = {
                 "command": {
                     "command_type": "fill",
@@ -161,14 +181,17 @@
         }
 
         function sendPulse() {
-            const speed = document.getElementById('pulse_speed').value
+            const window = document.getElementById('pulse_window').value
+            const red = document.getElementById('pulse_red').value
+            const green = document.getElementById('pulse_green').value
+            const blue = document.getElementById('pulse_blue').value
             const data = {
                 "command": {
                     "command_type": "pulse",
-                    "speed": Math.round(Number(speed) / 100),
+                    "window": window,
+                    "color": [red, green, blue],
                 }
             }
-            console.log(data)
             send(data)
         }
 

@@ -5,8 +5,8 @@ logger = logging.getLogger(__name__)
 
 
 def fill(led_strip: LedStrip, color: tuple[int, int, int]) -> None:
-    fill_no_autowrite(led_strip, color)
-    write(led_strip)
+    led_strip.strip.fill(color)
+    led_strip.strip.show()
 
 
 def fill_no_autowrite(led_strip: LedStrip, color: tuple[int, int, int]) -> None:

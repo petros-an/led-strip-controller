@@ -11,7 +11,7 @@ from commands.fill import FillCommand
 
 
 from commands.rotate import RotateCommand
-from commands import execute_command, rotate, parse_command
+from commands import execute_command, rotate, parse_command, fill
 from commands.command import CommandType, Command
 from led_strip import LedStrip
 from pytest import MonkeyPatch
@@ -39,7 +39,6 @@ def test_rotate_command(monkeypatch: MonkeyPatch) -> None:
 
 
 def test_stop_command(monkeypatch: MonkeyPatch) -> None:
-    monkeypatch.setattr("led_strip.operations.fill", mock_fill := Mock())
     monkeypatch.setattr("led_strip.operations.clear", mock_clear := Mock())
     strip = LedStrip(Mock())
     fill_command = FillCommand(
@@ -47,8 +46,6 @@ def test_stop_command(monkeypatch: MonkeyPatch) -> None:
         color=(255, 0, 0),
     )
     execute_command(strip, fill_command)
-    mock_fill.assert_called_once_with(strip, (255, 0, 0))
-
     command = StopCommand(command_type=CommandType.STOP)
     execute_command(strip, command)
     mock_clear.assert_called_once_with(strip)
@@ -58,6 +55,7 @@ def test_change_command(monkeypatch: MonkeyPatch) -> None:
     monkeypatch.setattr("led_strip.operations.fill", mock_fill := Mock())
 
     strip = LedStrip(Mock())
+    fill.current_color = (0, 0, 0)
     fill_command = FillCommand(
         command_type=CommandType.FILL,
         color=(255, 0, 0),

@@ -14,11 +14,19 @@ class FillCommand(Command):
     color: tuple[int, int, int]
 
 
+current_color = (0, 0, 0)
+
+
 def resume(
     led_strip: led_strip_module.LedStrip,
     command: FillCommand,
 ) -> CommandResult:
-    led_strip_module.operations.fill(led_strip, command.color)
+    global current_color
+
+    if current_color != command.color:
+        led_strip_module.operations.fill(led_strip, command.color)
+        current_color = command.color
+
     return CommandResult()
 
 

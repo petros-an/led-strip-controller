@@ -3,8 +3,7 @@ import logging
 from contextlib import contextmanager
 
 from dataclasses import dataclass
-from typing import Iterator, Callable
-
+from typing import Iterator, Callable, Any, Coroutine
 
 import commands
 
@@ -31,15 +30,17 @@ def set_up_server_with_led_strip(
     with led_strip.set_up_led_strip(led_number, pin) as led_strip_instance:
         yield Server(led_strip_instance, host, port)
 
+command_lock = asyncio.Lock()
 
-def handle_message(data: str, strip: LedStrip) -> str:
+async def handle_message(data: str, strip: LedStrip) -> str:
     try:
         command = schema.parse_command(data)
     except schema.InvalidFormat as e:
         return schema.make_invalid_format_response(e)
 
     try:
-        result = commands.execute_command(strip, command)
+        async with command_lock:
+            result = commands.execute_command(strip, command)
         return schema.make_success_response(result)
 
     except commands.InvalidCommand as e:
@@ -48,9 +49,9 @@ def handle_message(data: str, strip: LedStrip) -> str:
         return schema.make_execution_error_response(e)
 
 
-def make_message_handler(led_strip: LedStrip) -> Callable[[str], str]:
-    def message_handler(data: str) -> str:
-        return handle_message(data, led_strip)
+def make_message_handler(led_strip: LedStrip) -> Callable[[str], Coroutine[Any, Any, str]]:
+    async def message_handler(data: str) -> str:
+        return await handle_message(data, led_strip)
 
     return message_handler
 
@@ -58,7 +59,8 @@ def make_message_handler(led_strip: LedStrip) -> Callable[[str], str]:
 async def resume_execution_periodically(led_strip: LedStrip, period: float) -> None:
     while True:
         await asyncio.sleep(period)
-        continue_execution(led_strip)
+        async with command_lock:
+            continue_execution(led_strip)
 
 
 async def run_server(server: Server) -> None:

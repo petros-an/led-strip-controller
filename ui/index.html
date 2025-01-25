@@ -74,6 +74,15 @@
         </div>
 
         <div>
+            <h2>Random Walk</h2>
+            <div>
+                <button type="submit"  onclick="sendRandomWalk()" style="font-size: 150%">Submit</button>
+            </div>
+            <br>
+            <hr>
+        </div>
+
+        <div>
             <h2>Pulse</h2>
             <div>
                 <div style="font-size: 150%">
@@ -191,6 +200,15 @@
                     "command_type": "pulse",
                     "window": window,
                     "color": [red, green, blue],
+                }
+            }
+            send(data)
+        }
+
+        function sendRandomWalk() {
+            const data = {
+                "command": {
+                    "command_type": "random_walk",
                 }
             }
             send(data)

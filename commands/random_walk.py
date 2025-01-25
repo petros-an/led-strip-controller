@@ -27,10 +27,12 @@ def resume(
     index = random.choice([0, 1, 2])
     if random.choice([True, False]):
         for _ in range(random.randint(1, 5)):
-            next_color[index] += 1
+            if next_color[index] < 254:
+                next_color[index] += 1
     else:
         for _ in range(random.randint(1, 5)):
-            next_color[index] -= 1
+            if next_color[index] > 0:
+                next_color[index] -= 1
 
     operations.fill(led_strip, tuple(next_color))  # type: ignore[arg-type]
     current_color = next_color

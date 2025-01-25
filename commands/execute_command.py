@@ -63,7 +63,7 @@ def execute_command(led_strip: LedStrip, command: Command) -> CommandResult:
 
 def continue_execution(led_strip: LedStrip) -> CommandResult:
     current_command = get_current_command()
-    logger.info(f"Continuing execution: {current_command}")
+    logger.debug(f"Continuing execution: {current_command}")
     if current_command:
         return execute_command(led_strip, current_command)
     else:

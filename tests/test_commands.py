@@ -1,4 +1,7 @@
+from typing import Any
 from unittest.mock import Mock, call
+
+import pytest
 
 from commands.set_brightness import SetBrightnessCommand
 from commands.stop import StopCommand
@@ -8,8 +11,8 @@ from commands.fill import FillCommand
 
 
 from commands.rotate import RotateCommand
-from commands import execute_command, rotate
-from commands.command import CommandType
+from commands import execute_command, rotate, parse_command
+from commands.command import CommandType, Command
 from led_strip import LedStrip
 from pytest import MonkeyPatch
 
@@ -103,3 +106,36 @@ def test_set_brightness(monkeypatch: MonkeyPatch) -> None:
     )
     execute_command(strip, brightness_command)
     mock_set_brightness.assert_called_once_with(strip, 0.5)
+
+
+@pytest.mark.parametrize(
+    "data, expected",
+    [
+        (
+            {"command": {"command_type": "fill", "color": [255, 0, 0]}},
+            FillCommand(command_type=CommandType.FILL, color=(255, 0, 0)),
+        ),
+        (
+            {"command": {"command_type": "stop"}},
+            StopCommand(command_type=CommandType.STOP),
+        ),
+        (
+            {"command": {"command_type": "test"}},
+            TestCommand(command_type=CommandType.TEST),
+        ),
+        (
+            {"command": {"command_type": "rotate"}},
+            RotateCommand(command_type=CommandType.ROTATE),
+        ),
+        (
+            {"command": {"command_type": "set_brightness", "brightness": 0.5}},
+            SetBrightnessCommand(
+                command_type=CommandType.SET_BRIGHTNESS, brightness=0.5
+            ),
+        ),
+    ],
+)
+def test_parse_command(
+    monkeypatch: MonkeyPatch, data: dict[str, Any], expected: Command
+) -> None:
+    assert parse_command(data) == expected

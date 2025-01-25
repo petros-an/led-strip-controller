@@ -6,6 +6,7 @@ from pydantic import BaseModel, Field
 from commands import Command
 from commands.fill import FillCommand
 from commands.rotate import RotateCommand
+from commands.set_brightness import SetBrightnessCommand
 from commands.stop import StopCommand
 from commands.test import TestCommand
 
@@ -13,9 +14,9 @@ logger = logging.getLogger(__name__)
 
 
 class CommandSchema(BaseModel):
-    command: Union[TestCommand, FillCommand, StopCommand, RotateCommand] = Field(
-        discriminator="command_type"
-    )
+    command: Union[
+        TestCommand, FillCommand, StopCommand, RotateCommand, SetBrightnessCommand
+    ] = Field(discriminator="command_type")
 
 
 def parse_command(json_data: dict[str, Any]) -> Command:

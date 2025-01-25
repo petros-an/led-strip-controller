@@ -1,6 +1,7 @@
 from contextlib import contextmanager
 from typing import Iterator
 
+from led_strip.operations import set_brightness
 from wrappers import neopixel, board
 
 import logging
@@ -17,6 +18,7 @@ def set_up_led_strip(led_number: int, pin: str) -> Iterator[LedStrip]:
     with neopixel.NeoPixel(board_pin, led_number) as neopixel_strip:
         led_strip = LedStrip(neopixel_strip)
         perform_startup_animation(led_strip)
+        set_brightness(led_strip, 1)
         try:
             yield led_strip
         finally:

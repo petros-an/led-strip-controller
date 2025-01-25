@@ -8,7 +8,9 @@ from commands import fill as fill_command
 from commands import test as test_command
 from commands import stop as stop_command
 from commands import rotate as rotate_command
+from commands import set_brightness
 import logging
+
 
 logger = logging.getLogger(__name__)
 
@@ -26,6 +28,7 @@ module_map = {
     CommandType.STOP: stop_command,
     CommandType.FILL: fill_command,
     CommandType.ROTATE: rotate_command,
+    CommandType.SET_BRIGHTNESS: set_brightness,
 }
 _current_command: Optional[Command] = None
 

@@ -35,7 +35,7 @@ def resume(
     else:
         color = (0, 0, 0)
 
-    operations.fill(led_strip, color, 1)
+    operations.fill(led_strip, color)
     sleep(0.1)
 
     step += 1

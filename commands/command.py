@@ -1,5 +1,4 @@
 from enum import Enum
-from typing import Literal
 import logging
 
 from pydantic import BaseModel
@@ -16,17 +15,4 @@ class CommandType(str, Enum):
     STOP = "stop"
     FILL = "fill"
     ROTATE = "rotate"
-
-
-class TestCommand(Command):
-    command_type: Literal[CommandType.TEST]
-
-
-class FillCommand(Command):
-    command_type: Literal[CommandType.FILL]
-    color: tuple[int, int, int]
-    brightness: float
-
-
-class StopCommand(Command):
-    command_type: Literal[CommandType.STOP]
+    SET_BRIGHTNESS = "set_brightness"

@@ -9,16 +9,16 @@ from led_strip import LedStrip
 logger = logging.getLogger(__name__)
 
 
-class FillCommand(Command):
-    command_type: Literal[CommandType.FILL]
-    color: tuple[int, int, int]
+class SetBrightnessCommand(Command):
+    command_type: Literal[CommandType.SET_BRIGHTNESS]
+    brightness: float
 
 
 def resume(
     led_strip: led_strip_module.LedStrip,
-    command: FillCommand,
+    command: SetBrightnessCommand,
 ) -> CommandResult:
-    led_strip_module.operations.fill(led_strip, command.color)
+    led_strip_module.operations.set_brightness(led_strip, command.brightness)
     return CommandResult()
 
 

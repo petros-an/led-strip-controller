@@ -4,8 +4,10 @@ from typing import Any, Union
 from pydantic import BaseModel, Field
 
 from commands import Command
-from commands.command import TestCommand, FillCommand, StopCommand
+from commands.fill import FillCommand
 from commands.rotate import RotateCommand
+from commands.stop import StopCommand
+from commands.test import TestCommand
 
 logger = logging.getLogger(__name__)
 

@@ -10,12 +10,12 @@ logger = logging.getLogger(__name__)
 
 def perform_startup_animation(led_strip: LedStrip) -> None:
     logger.info("Performing startup animation")
-    brightness = 0.01
+    operations.set_brightness(led_strip, 0.01)
     for _ in range(5):
         r = randrange(0, 256)
         g = randrange(0, 256)
         b = randrange(0, 256)
-        operations.fill(led_strip, (r, g, b), brightness)
+        operations.fill(led_strip, (r, g, b))
         sleep(0.3)
 
     operations.clear(led_strip)

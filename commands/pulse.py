@@ -32,8 +32,7 @@ def resume(
 
     index = step % length
 
-    if step == 0:
-        operations.fill_no_autowrite(led_strip, (0, 0, 0))
+    operations.fill_no_autowrite(led_strip, (0, 0, 0))
 
     for i in range(
         max(0, index - window),

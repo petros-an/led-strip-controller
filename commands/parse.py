@@ -5,6 +5,7 @@ from pydantic import BaseModel, Field
 
 from commands import Command
 from commands.fill import FillCommand
+from commands.pulse import PulseCommand
 from commands.rotate import RotateCommand
 from commands.set_brightness import SetBrightnessCommand
 from commands.stop import StopCommand
@@ -15,7 +16,12 @@ logger = logging.getLogger(__name__)
 
 class CommandSchema(BaseModel):
     command: Union[
-        TestCommand, FillCommand, StopCommand, RotateCommand, SetBrightnessCommand
+        TestCommand,
+        FillCommand,
+        StopCommand,
+        RotateCommand,
+        SetBrightnessCommand,
+        PulseCommand,
     ] = Field(discriminator="command_type")
 
 

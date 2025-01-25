@@ -17,3 +17,9 @@ def clear(led_strip: LedStrip) -> None:
 
 def set_brightness(led_strip: LedStrip, brightness: float) -> None:
     led_strip.strip.brightness = brightness
+
+
+def set_pixel_color(
+    led_strip: LedStrip, index: int, color: tuple[int, int, int]
+) -> None:
+    led_strip.strip[index] = color

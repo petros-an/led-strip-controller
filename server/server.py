@@ -30,7 +30,9 @@ def set_up_server_with_led_strip(
     with led_strip.set_up_led_strip(led_number, pin) as led_strip_instance:
         yield Server(led_strip_instance, host, port)
 
+
 command_lock = asyncio.Lock()
+
 
 async def handle_message(data: str, strip: LedStrip) -> str:
     try:
@@ -49,7 +51,9 @@ async def handle_message(data: str, strip: LedStrip) -> str:
         return schema.make_execution_error_response(e)
 
 
-def make_message_handler(led_strip: LedStrip) -> Callable[[str], Coroutine[Any, Any, str]]:
+def make_message_handler(
+    led_strip: LedStrip,
+) -> Callable[[str], Coroutine[Any, Any, str]]:
     async def message_handler(data: str) -> str:
         return await handle_message(data, led_strip)
 

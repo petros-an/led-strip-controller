@@ -15,6 +15,12 @@ if TESTING:
         def __exit__(self, exc_type, exc_val, exc_tb):
             pass
 
+        def __len__(self):
+            return 300
+
+        def __setitem__(self, key, value):
+            pass
+
     neopixel = Mock(NeoPixel=_NeoPixel)
     board = Mock()
 else:

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Pi light controller</title>
+</head>
+<body>
+    <div style="text-align: center; margin-left: 3vw; margin-right: 3vw; margin-top: 4vh; font-size: 200%">
+
+
+        <h1>Pi Light controller</h1>
+
+        <div>
+            <div>
+                <button type="submit" onclick="sendStop()" style="font-size: 150%">STOP</button>
+            </div>
+            <br>
+            <hr>
+        </div>
+
+        <div>
+            <h2>Fill</h2>
+            <div style="font-size: 150%">
+                <div style="height: 5vh">
+                    Red: <input type="range" min="0" max="255" id="red" style="width: 300px" oninput="sendFill()">
+                </div>
+                <div style="height: 5vh">
+                    Green: <input type="range" min="0" max="255" id="green" style="width: 300px" oninput="sendFill()">
+                </div>
+                <div style="height: 5vh">
+                    Blue: <input type="range" min="0" max="255" id="blue" style="width: 300px" oninput="sendFill()">
+                </div>
+            </div>
+
+            <br>
+
+            <div>
+                <button type="submit"  onclick="sendFill()" style="font-size: 150%">Submit</button>
+            </div>
+
+            <br>
+            <hr>
+
+        </div>
+
+
+        <div>
+            <h2>Brightness</h2>
+            <div style="font-size: 150%">
+                <div style="height: 5vh">
+                    Brightness: <input type="range" min="0" max="100" id="brightness" style="width: 300px" oninput="sendBrightness()">
+                </div>
+            </div>
+
+            <br>
+
+            <div>
+                <button type="submit"  onclick="sendBrightness()" style="font-size: 150%">Submit</button>
+            </div>
+
+            <br>
+            <hr>
+
+        </div>
+
+
+        <div>
+            <h2>Rotate</h2>
+            <div>
+                <button type="submit"  onclick="sendRotate()" style="font-size: 150%">Submit</button>
+            </div>
+            <br>
+            <hr>
+        </div>
+
+        <div>
+            <h2>Pulse</h2>
+            <div>
+                Speed: <input type="range" min="0" max="100" id="pulse_speed" style="width: 300px" oninput="sendPulse()">
+            </div>
+            <br>
+            <button type="submit"  onclick="sendPulse()" style="font-size: 150%">Submit</button>
+            <hr>
+        </div>
+
+    </div>
+
+    <script>
+
+        let socket = null;
+
+        function getSocket() {
+            if (socket == null) {
+               initSocket()
+            }
+            return socket
+        }
+        function initSocket() {
+            socket = new WebSocket('ws://192.168.1.110:6543');
+            socket.onclose = function(event) {
+                initSocket()
+            }
+
+            socket.onerror = function(event) {
+                initSocket()
+            }
+
+        }
+
+
+        function send(data){
+            const sock = getSocket()
+            console.time("_send")
+            sock.send(JSON.stringify(data))
+            console.timeEnd("_send")
+        }
+
+        function sendStop() {
+           const data = {
+                "command": {
+                    "command_type": "stop",
+                }
+            }
+            send(data)
+        }
+
+        function sendFill() {
+            const red = document.getElementById('red').value
+            const green = document.getElementById('green').value
+            const blue = document.getElementById('blue').value
+            const data = {
+                "command": {
+                    "command_type": "fill",
+                    "color": [red, green, blue],
+                }
+            }
+            send(data)
+        }
+
+        function sendRotate() {
+           const data = {
+                "command": {
+                    "command_type": "rotate",
+                }
+            }
+            send(data)
+        }
+
+        function sendBrightness() {
+            const brightness = document.getElementById('brightness').value
+            const data = {
+                "command": {
+                    "command_type": "set_brightness",
+                    "brightness": brightness / 100,
+                }
+            }
+            send(data)
+        }
+
+        function sendPulse() {
+            const speed = document.getElementById('pulse_speed').value
+            const data = {
+                "command": {
+                    "command_type": "pulse",
+                    "speed": speed,
+                }
+            }
+            send(data)
+        }
+
+    </script>
+
+</body>
+</html>

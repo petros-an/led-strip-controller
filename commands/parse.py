@@ -6,6 +6,7 @@ from pydantic import BaseModel, Field
 from commands import Command
 from commands.fill import FillCommand
 from commands.pulse import PulseCommand
+from commands.random_walk import RandomWalk
 from commands.rotate import RotateCommand
 from commands.set_brightness import SetBrightnessCommand
 from commands.stop import StopCommand
@@ -22,6 +23,7 @@ class CommandSchema(BaseModel):
         RotateCommand,
         SetBrightnessCommand,
         PulseCommand,
+        RandomWalk,
     ] = Field(discriminator="command_type")
 
 

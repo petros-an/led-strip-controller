@@ -35,6 +35,8 @@ async def send_command(command: str, url: str) -> None:
             data = {
                 "command": {"command_type": "pulse", "color": [r, g, b], "window": 5}
             }
+        case "random_walk":
+            data = {"command": {"command_type": "random_walk"}}
         case _:
             raise ValueError(f"Unknown command: {command}")
 

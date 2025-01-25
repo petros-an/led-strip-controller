@@ -17,3 +17,4 @@ class CommandType(str, Enum):
     ROTATE = "rotate"
     SET_BRIGHTNESS = "set_brightness"
     PULSE = "pulse"
+    RANDOM_WALK = "random_walk"

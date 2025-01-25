@@ -132,6 +132,7 @@
 
         function send(data){
             const sock = getSocket()
+            console.log(data)
 
             console.time("_send")
             sock.send(JSON.stringify(data))
@@ -148,9 +149,9 @@
         }
 
         function sendFill() {
-            const red = document.getElementById('fill_red').value
-            const green = document.getElementById('fill_green').value
-            const blue = document.getElementById('fill_blue').value
+            const red = Number(document.getElementById('fill_red').value)
+            const green = Number(document.getElementById('fill_green').value)
+            const blue = Number(document.getElementById('fill_blue').value)
             const data = {
                 "command": {
                     "command_type": "fill",
@@ -181,10 +182,10 @@
         }
 
         function sendPulse() {
-            const window = document.getElementById('pulse_window').value
-            const red = document.getElementById('pulse_red').value
-            const green = document.getElementById('pulse_green').value
-            const blue = document.getElementById('pulse_blue').value
+            const window = Number(document.getElementById('pulse_window').value)
+            const red = Number(document.getElementById('pulse_red').value)
+            const green = Number(document.getElementById('pulse_green').value)
+            const blue = Number(document.getElementById('pulse_blue').value)
             const data = {
                 "command": {
                     "command_type": "pulse",

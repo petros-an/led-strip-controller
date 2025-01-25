@@ -1,6 +1,8 @@
 import websockets
 import logging
 
+from websockets import ConnectionClosedError
+
 logger = logging.getLogger(__name__)
 
 
@@ -10,9 +12,12 @@ class NoDataRead(Exception):
 
 def make_websocket_connection_handler(handler):
     async def handle_websocket_connection(websocket) -> None:
-        async for message in websocket:
-            response = await handler(message)
-            await websocket.send(response)
+        try:
+            async for message in websocket:
+                response = await handler(message)
+                await websocket.send(response)
+        except ConnectionClosedError:
+            return
 
     return handle_websocket_connection
 

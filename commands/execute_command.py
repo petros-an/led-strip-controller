@@ -3,8 +3,9 @@ from typing import Protocol, Optional, cast
 from commands.command import Command, CommandType
 from commands.command_result import CommandResult
 from commands.exceptions import InvalidCommand
+from commands.random_walk import RandomWalk
 from led_strip.led_strip import LedStrip
-from commands import fill as fill_command, pulse
+from commands import fill as fill_command, pulse, random_walk
 from commands import test as test_command
 from commands import stop as stop_command
 from commands import rotate as rotate_command
@@ -30,6 +31,7 @@ module_map = {
     CommandType.ROTATE: rotate_command,
     CommandType.SET_BRIGHTNESS: set_brightness,
     CommandType.PULSE: pulse,
+    CommandType.RANDOM_WALK: random_walk,
 }
 _current_command: Optional[Command] = None
 

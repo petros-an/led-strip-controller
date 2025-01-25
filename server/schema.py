@@ -19,7 +19,7 @@ def make_invalid_format_response(e: InvalidFormat) -> str:
 
 
 def make_invalid_command_response(e: commands.InvalidCommand) -> str:
-    return ResponseSchema(status=Status.INVALID_INPUT, error=str(e)).model_dump_json()
+    return ResponseSchema(status=Status.INVALID_INPUT, error='Invalid Command').model_dump_json()
 
 
 def make_execution_error_response(e: commands.CommandExecutionError) -> str:
